@@ -4,7 +4,7 @@
   "description": "a programming language made in typescript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsc && node dist/index.js" 
   },
   "repository": {
     "type": "git",
