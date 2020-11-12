@@ -11,27 +11,22 @@ const lexer = (filename: string) => {
         if (err) {
             return console.log(`Error while reading file | Error: ${err}`);
         }
-        let tokens = [];
+       let tokens = [];
        let source = data.toString();
        let index = 0;
-       
+    
        while (index < source.length) {
            let current = source[index];
            if (current === "+") {
-            tokens.push(TOKEN_ADD);
+            tokens.push({token: TOKEN_ADD, value:current})
            } else if(current === "-") {
-            tokens.push(TOKEN_SUBTRACT);
-           } else if("0123456789".indexOf(current) >= 0) {
-            let number = current;
-            while ("0123456789".indexOf(source[index]) >= 0) {
-                number += source[index];
-                index++
-            }
-                tokens.push(TOKEN_INT) 
+                tokens.push({token: TOKEN_SUBTRACT, value: current})
+           } else if("0123456789".indexOf(source[index]) >= 0) {
+               tokens.push({token: TOKEN_INT, value: current});
            }
            index++
        }
-        console.log(tokens);
+       console.log(tokens);
    });
 }
 
