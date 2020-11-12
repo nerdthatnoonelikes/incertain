@@ -12,7 +12,7 @@ const lexer = (filename: string) => {
             return console.log(`Error while reading file | Error: ${err}`);
         }
         let tokens = [];
-       let source = data
+       let source = data.toString();
        let index = 0;
        
        while (index < source.length) {
@@ -22,10 +22,15 @@ const lexer = (filename: string) => {
            } else if(current === "-") {
             tokens.push(TOKEN_SUBTRACT);
            } else if("0123456789".indexOf(current) >= 0) {
-            tokens.push(TOKEN_INT);
+            let number = current;
+            while ("0123456789".indexOf(source[index]) >= 0) {
+                number += source[index];
+                index++
+            }
+                tokens.push(TOKEN_INT) 
            }
            index++
-        }
+       }
         console.log(tokens);
    });
 }
