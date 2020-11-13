@@ -1,13 +1,22 @@
 import fs from "fs";
+import {LexerOptions} from "./LexerOptions"
 
 // Tokens
 const TOKEN_INT = "INT";
 const TOKEN_ADD = "ADD";
 const TOKEN_SUBTRACT = "SUBTRACT";
+const TOKEN_FLOAT = "FLOAT";
 
-const lexer = (filename: string) => {
+const nums = "0123456789"
 
-    fs.readFile(filename, 'utf8', function (err,data) {
+class Lexer {
+    public filename;
+    public constructor(options: LexerOptions) {
+        this.filename = options.filename
+    }
+
+    public lexer = () => {
+         fs.readFile(this.filename, 'utf8', function (err,data) {
         if (err) {
             return console.log(`Error while reading file | Error: ${err}`);
         }
@@ -21,13 +30,15 @@ const lexer = (filename: string) => {
             tokens.push({token: TOKEN_ADD, value:current})
            } else if(current === "-") {
                 tokens.push({token: TOKEN_SUBTRACT, value: current})
-           } else if("0123456789".indexOf(source[index]) >= 0) {
-               tokens.push({token: TOKEN_INT, value: current});
+           } else if(nums.includes(current)) {
+               tokens.push({token: TOKEN_INT, value: current})
            }
            index++
        }
        console.log(tokens);
-   });
+     });
+    }
 }
 
-lexer("test/test.ic")
+const lexer = new Lexer({filename: "test/test.ic"})
+lexer.lexer();
