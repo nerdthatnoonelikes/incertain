@@ -23,18 +23,28 @@ class Lexer {
        let tokens = [];
        let source = data.toString();
        let index = 0;
-    
-       while (index < source.length) {
-           let current = source[index];
-           if (current === "+") {
-            tokens.push({token: TOKEN_ADD, value:current})
-           } else if(current === "-") {
-                tokens.push({token: TOKEN_SUBTRACT, value: current})
-           } else if(nums.includes(current)) {
-               tokens.push({token: TOKEN_INT, value: current})
-           }
-           index++
-       }
+       let buffer = [];
+        
+       for (let x of source) {
+        if (!nums.includes(x) && buffer.length > 0) {
+            tokens.push({token: TOKEN_INT, value: + buffer.join("")})
+            buffer = []
+        }
+
+        if (x === "+") {
+            tokens.push({token: TOKEN_ADD, value: x})
+        } else if(x === "-") {
+            tokens.push({token: TOKEN_SUBTRACT, value: x})
+        } else if(x === " ") {
+            continue;
+        } else if(nums.includes(x)) {
+            buffer.push(x);
+        }
+    }
+    if (buffer.length > 0) {
+        tokens.push({token: TOKEN_INT, value: + buffer.join("")});
+        buffer.splice(0, buffer.length)
+    }
        console.log(tokens);
      });
     }
