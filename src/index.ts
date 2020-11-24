@@ -1,6 +1,3 @@
-import fs from "fs";
-import {LexerOptions} from "./LexerOptions"
-
 // Tokens
 const TOKEN_INT = "INT";
 const TOKEN_ADD = "ADD";
@@ -9,20 +6,17 @@ const TOKEN_FLOAT = "FLOAT";
 
 const nums = "0123456789"
 
-class Lexer {
-    public filename;
-    public constructor(options: LexerOptions) {
-        this.filename = options.filename
-    }
+/**
+ * ============================================================================
+ *                                   (/^▽^)/
+ *                                THE LEXER!
+ * ============================================================================
+ */
 
-    public lexer = () => {
-         fs.readFile(this.filename, 'utf8', function (err,data) {
-        if (err) {
-            return console.log(`Error while reading file | Error: ${err}`);
-        }
+
+export const lexer = (contents) => {
        let tokens = [];
-       let source = data.toString();
-       let index = 0;
+       let source = contents.toString();
        let buffer = [];
         
        for (let x of source) {
@@ -45,10 +39,6 @@ class Lexer {
         tokens.push({token: TOKEN_INT, value: + buffer.join("")});
         buffer.splice(0, buffer.length)
     }
-       console.log(tokens);
-     });
-    }
+    
+    console.log(tokens);
 }
-
-const lexer = new Lexer({filename: "test/test.ic"})
-lexer.lexer();
