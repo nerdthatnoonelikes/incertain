@@ -1,8 +1,10 @@
 // Tokens
-const TOKEN_INT = "INT";
-const TOKEN_ADD = "ADD";
-const TOKEN_SUBTRACT = "SUBTRACT";
-const TOKEN_FLOAT = "FLOAT";
+const TOKEN_INT = "int";
+const TOKEN_ADD = "add";
+const TOKEN_SUBTRACT = "subtract";
+const TOKEN_PAREN = "paren";
+
+
 
 const nums = "0123456789"
 
@@ -21,18 +23,39 @@ export const lexer = (contents) => {
         
        for (let x of source) {
         if (!nums.includes(x) && buffer.length > 0) {
-            tokens.push({token: TOKEN_INT, value: + buffer.join("")})
+            tokens.push({
+                token: TOKEN_INT,
+                value: + buffer.join("")
+            })
             buffer = []
         }
 
         if (x === "+") {
-            tokens.push({token: TOKEN_ADD, value: x})
+            tokens.push({
+                token: TOKEN_ADD,
+                value: x
+            })
         } else if(x === "-") {
-            tokens.push({token: TOKEN_SUBTRACT, value: x})
+            tokens.push({
+                token: TOKEN_SUBTRACT,
+                value: x
+            })
         } else if(x === " ") {
             continue;
         } else if(nums.includes(x)) {
             buffer.push(x);
+        } else if(x === "(") {
+            tokens.push({
+                token: TOKEN_PAREN,
+                value: "("
+            })
+        } else if(x === ")") {
+            tokens.push({
+                token: TOKEN_PAREN,
+                value: ")"
+            })
+        } else {
+            throw new Error(`Unknown character: ${x}`);
         }
     }
     if (buffer.length > 0) {
@@ -40,5 +63,13 @@ export const lexer = (contents) => {
         buffer.splice(0, buffer.length)
     }
     
-    console.log(tokens);
+    return tokens;
 }
+
+/**
+ * ============================================================================
+ *                                 ヽ/❀o ل͜ o\ﾉ
+ *                                THE PARSER!!!
+ * ============================================================================
+ */
+
