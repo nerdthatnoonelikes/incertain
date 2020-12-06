@@ -1,3 +1,6 @@
+import logger from "@ayana/logger";
+const log = logger.get("Incertain")
+
 // Tokens
 const TOKEN_INT = "int";
 const TOKEN_ADD = "add";
@@ -42,6 +45,8 @@ export const lexer = (contents) => {
             })
         } else if(x === " ") {
             continue;
+        } else if(x == "\n") {
+            continue;
         } else if(nums.includes(x)) {
             buffer.push(x);
         } else if(x === "(") {
@@ -55,7 +60,7 @@ export const lexer = (contents) => {
                 value: ")"
             })
         } else {
-            throw new Error(`Unknown character: ${x}`);
+            log.error(`Unkown character: ${x}`)
         }
     }
     if (buffer.length > 0) {
@@ -73,3 +78,28 @@ export const lexer = (contents) => {
  * ============================================================================
  */
 
+export const parser = (tokens) => {
+    let current = 0;
+
+    let ast = {
+        type: "Program",
+        body: [],
+    }
+
+    for (let token of tokens) {
+        if (token.token === "paren") {
+            token = tokens[++current];
+        }
+
+        if (token.token === "add") {
+            current++
+            ast.body.push({type: "CallExpression", function: "add", args: [{type: "Number", value: tokens[current-1].value}, {type: "Number", value: tokens[current+1].value}]})
+        }
+
+        if (token.token === "subtract") {
+            current++
+            ast.body.push({type: "CallExpression", function: "subtract", args: [{type: "Number", value: tokens[current-1].value}, {type: "Number", value: tokens[current+1].value}]})
+        }
+    }
+    return ast;
+}
