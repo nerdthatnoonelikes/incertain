@@ -110,6 +110,6 @@ export const evaluate = (ast) => {
     } 
 
     if (ast.body[0].function === "add") {
-        return ast.body[0].args[0].value - ast.body[0].args[1].value;
+        return ast.body[0].args[0].value + ast.body[0].args[1].value;
     }
 }
