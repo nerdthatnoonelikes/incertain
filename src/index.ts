@@ -7,8 +7,6 @@ const TOKEN_ADD = "add";
 const TOKEN_SUBTRACT = "subtract";
 const TOKEN_PAREN = "paren";
 
-
-
 const nums = "0123456789"
 
 /**
@@ -38,6 +36,7 @@ export const lexer = (contents) => {
                 token: TOKEN_ADD,
                 value: x
             })
+            continue;
         } else if(x === "-") {
             tokens.push({
                 token: TOKEN_SUBTRACT,
@@ -60,7 +59,8 @@ export const lexer = (contents) => {
                 value: ")"
             })
         } else {
-            log.error(`Unkown character: ${x}`)
+            break;
+            //log.error(`Unkown character: ${x}`)
         }
     }
     if (buffer.length > 0) {
@@ -102,4 +102,14 @@ export const parser = (tokens) => {
         }
     }
     return ast;
+}
+
+export const evaluate = (ast) => {
+    if (ast.body[0].function === "subtract") {
+        return ast.body[0].args[0].value - ast.body[0].args[1].value;
+    } 
+
+    if (ast.body[0].function === "add") {
+        return ast.body[0].args[0].value - ast.body[0].args[1].value;
+    }
 }
