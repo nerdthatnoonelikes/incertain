@@ -1,4 +1,9 @@
 # incertain
 
 # Checklist
-[] Basic Math Operations 
+[X] Basic Math Operations
+
+# Example Code
+```
+(23 + 29)
+```
