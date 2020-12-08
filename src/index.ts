@@ -6,6 +6,7 @@ const TOKEN_INT = "int";
 const TOKEN_ADD = "add";
 const TOKEN_SUBTRACT = "subtract";
 const TOKEN_PAREN = "paren";
+const TOKEN_MULT = "mult";
 
 const nums = "0123456789"
 
@@ -58,9 +59,13 @@ export const lexer = (contents) => {
                 token: TOKEN_PAREN,
                 value: ")"
             })
+        } else if(x === "*") {
+            tokens.push({
+                token: TOKEN_MULT,
+                value: "*"
+            })
         } else {
-            break;
-            //log.error(`Unkown character: ${x}`)
+           log.error(`Unkown character: ${x}`)
         }
     }
     if (buffer.length > 0) {
@@ -100,6 +105,11 @@ export const parser = (tokens) => {
             current++
             ast.body.push({type: "CallExpression", function: "subtract", args: [{type: "Number", value: tokens[current-1].value}, {type: "Number", value: tokens[current+1].value}]})
         }
+
+        if (token.token === "mult") {
+            current++
+            ast.body.push({type: "CallExpression", function: "mult", args: [{type: "Number", value: tokens[current-1].value}, {type: "Number", value: tokens[current+1].value}]})
+        }
     }
     return ast;
 }
@@ -111,5 +121,9 @@ export const evaluate = (ast) => {
 
     if (ast.body[0].function === "add") {
         return ast.body[0].args[0].value + ast.body[0].args[1].value;
+    }
+
+    if (ast.body[0].function === "mult") {
+        return ast.body[0].args[0].value * ast.body[0].args[1].value
     }
 }
